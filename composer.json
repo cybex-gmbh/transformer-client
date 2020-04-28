@@ -1,6 +1,7 @@
 {
     "name": "cybex/transformer",
     "description": "A minimal wrapper for transformer functionalities.",
+    "license": "MIT",
     "minimum-stability": "dev",
     "require": {
         "php": "^7.0",
