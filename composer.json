@@ -1,0 +1,23 @@
+{
+    "name": "cybex/transformer",
+    "description": "A minimal wrapper for transformer functionalities.",
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.0",
+        "illuminate/contracts": "^5.1",
+        "illuminate/support": "^5.1",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cybex\\Transformer\\TransformerServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4" : {
+            "Cybex\\Transformer\\" : "src/"
+        }
+    }
+}
