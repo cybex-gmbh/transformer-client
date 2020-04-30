@@ -29,15 +29,15 @@ class TransformerServiceProvider extends ServiceProvider
         // This will allow users to define only the options they actually want to override in the published copy of the configuration.
         $this->mergeConfigFrom(__DIR__.'/../config/transformer.php', 'transformer');
 
-        $this->app->singleton(Transformer::class, function ($app) {
-            return new Transformer(
-                $app->config('transformer.secret',''),
-                $app->config('transformer.api_url','https://transformer.goodbaby.eu/api/v1/'),
-                $app->config('transformer.delivery_url','https://images.goodbaby.eu/')
+        $this->app->singleton("Transformer", function () {
+            return new \Cybex\Transformer\Transformer(
+                config('transformer.secret',''),
+                config('transformer.api_url','https://transformer.goodbaby.eu/api/v1/'),
+                config('transformer.delivery_url','https://images.goodbaby.eu/')
             );
         });
 
-//        $this->app->alias('transformer', Transformer::class);
+        $this->app->alias('Transformer', Transformer::class);
     }
 
     /**
