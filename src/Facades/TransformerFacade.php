@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Foo\Bar\Example\Facades;
+namespace Cybex\Transformer\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Transformer extends Facade
+class TransformerFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
