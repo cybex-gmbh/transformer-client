@@ -34,27 +34,27 @@ class Transformer
     //    activate: key, mediaid                                        url:  https://transformer.goodbaby.eu/api/v1/activate
 
     public function add($filename, string $identifier, string $folder) {
-        $this->makeApiRequest('add', ['filename' => $filename, 'identifier' => $identifier, 'folder' => $folder]);
+        return $this->makeApiRequest('add', ['filename' => fopen($filename, 'r'), 'identifier' => $identifier, 'folder' => $folder]);
     }
 
     public function update($filename, string $old_identifier, string $new_identifier) {
-        $this->makeApiRequest('update', ['filename' => $filename, 'old_identifier' => $old_identifier, 'new_identifier' => $new_identifier]);
+        return $this->makeApiRequest('update', ['filename' => fopen($filename, 'r'), 'old_identifier' => $old_identifier, 'new_identifier' => $new_identifier]);
     }
 
     public function block(int $mediaid) {
-        $this->makeApiRequest('block', ['mediaid' => $mediaid]);
+        return $this->makeApiRequest('block', ['mediaid' => $mediaid]);
     }
 
     public function delete(int $mediaid) {
-        $this->makeApiRequest('delete', ['mediaid' => $mediaid]);
+        return $this->makeApiRequest('delete', ['mediaid' => $mediaid]);
     }
 
     public function versions(string $identifier) {
-        $this->makeApiRequest('versions', ['identifier' => $identifier]);
+        return $this->makeApiRequest('versions', ['identifier' => $identifier]);
     }
 
     public function activate(int $mediaid) {
-        $this->makeApiRequest('activate', ['mediaid' => $mediaid]);
+        return $this->makeApiRequest('activate', ['mediaid' => $mediaid]);
     }
 
 
@@ -114,20 +114,22 @@ class Transformer
             'timeout'  => 4,
         ]);
 
-        $options = [
-            'form_params' => [
-                'key'   => $this->secret,
-            ],
+        $multipart = [
+            'multipart' => [
+                [
+                    'name'      => 'key',
+                    'contents'  => $this->secret,
+                ]
+            ]
         ];
 
-        // add $params to the options array
-        if(count($params) > 0 ) {
-            array_push($options['form_params'], $params);
+        // add $params to the multipart array
+        foreach($params as $key => $value) {
+            $multipart['multipart'][] = ['name' => $key, 'contents' => $value];
         }
 
         // Request to transformer
-        $response = $guzzleClient->request('POST', $action_uri, $options);
-
+        $response = $guzzleClient->request('POST', $action_uri, $multipart);
 
         // Evaluate response and handle errors.
         // We can't only check for 200 here. Will receive 200, 201, 400, 404 from transformer
