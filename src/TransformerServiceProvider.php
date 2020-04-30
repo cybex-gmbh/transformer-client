@@ -15,7 +15,7 @@ class TransformerServiceProvider extends ServiceProvider
     public function boot()
     {
         // publish package config to app config space
-        $this->publishes([__DIR__.'/config/transformer.php' => config_path('transformer.php'),]);
+        $this->publishes([__DIR__.'/../config/transformer.php' => config_path('transformer.php'),]);
     }
 
     /**
@@ -27,7 +27,7 @@ class TransformerServiceProvider extends ServiceProvider
     {
         // merge package configuration file with the application's published copy.
         // This will allow users to define only the options they actually want to override in the published copy of the configuration.
-        $this->mergeConfigFrom(__DIR__.'/config/transformer.php', 'transformer');
+        $this->mergeConfigFrom(__DIR__.'/../config/transformer.php', 'transformer');
 
         $this->app->singleton(Transformer::class, function ($app) {
             return new Transformer(
