@@ -34,27 +34,27 @@ class Transformer
     //    activate: key, mediaid                                        url:  https://transformer.goodbaby.eu/api/v1/activate
 
     public function add($filename, string $identifier, string $folder) {
-        $this->makeRequest('add', ['filename' => $filename, 'identifier' => $identifier, 'folder' => $folder]);
+        $this->makeApiRequest('add', ['filename' => $filename, 'identifier' => $identifier, 'folder' => $folder]);
     }
 
     public function update($filename, string $old_identifier, string $new_identifier) {
-        $this->makeRequest('update', ['filename' => $filename, 'old_identifier' => $old_identifier, 'new_identifier' => $new_identifier]);
+        $this->makeApiRequest('update', ['filename' => $filename, 'old_identifier' => $old_identifier, 'new_identifier' => $new_identifier]);
     }
 
     public function block(int $mediaid) {
-        $this->makeRequest('block', ['mediaid' => $mediaid]);
+        $this->makeApiRequest('block', ['mediaid' => $mediaid]);
     }
 
     public function delete(int $mediaid) {
-        $this->makeRequest('delete', ['mediaid' => $mediaid]);
+        $this->makeApiRequest('delete', ['mediaid' => $mediaid]);
     }
 
     public function versions(string $identifier) {
-        $this->makeRequest('versions', ['identifier' => $identifier]);
+        $this->makeApiRequest('versions', ['identifier' => $identifier]);
     }
 
     public function activate(int $mediaid) {
-        $this->makeRequest('activate', ['mediaid' => $mediaid]);
+        $this->makeApiRequest('activate', ['mediaid' => $mediaid]);
     }
 
 
@@ -64,31 +64,53 @@ class Transformer
     //    get: /{stash}/{foldername}/{media}/{transformations?}         url:  https://images.goodbaby.eu/cybex/360images/image01/   OR {{--                https://images.goodbaby.eu/dev/baidiefische/budda/w-150+h-100
     //    getid: key, mediaid                                           url:  https://images.goodbaby.eu/getid/1
 
+    // Returns only a string representation of the requested url
+    public function getUrl($stash, $folder, $identifier, $transformations = '') {
+        return $this->delivery_url . '/' . $stash . '/' . $folder . '/' . $identifier . '/' . $transformations;
+    }
 
     public function get($stash, $folder, $identifier, $transformations = '') {
-        $action_url = $stash . "/" . $folder . "/" . $identifier . "/" . $transformations;
-        $this->makeRequest($action_url, [], true);
+        $action_url = $stash . '/' . $folder . '/' . $identifier . '/' . $transformations;
+        $this->makeDeliveryRequest($action_url);
     }
 
     public function getid(int $mediaid) {
-        $this->makeRequest('getid/' . $mediaid, [], true);
+        $this->makeDeliveryRequest('getid/' . $mediaid);
     }
 
-
-
-    private function makeRequest(string $action_uri, array $params, $delivery_url = false) {
-
-        $base_url = $this->api_url;
-        $request_method = 'POST';
-
-        if($delivery_url) {
-            $base_url = $this->$delivery_url;
-            $request_method = 'GET';
-        }
+    private function makeDeliveryRequest(string $action_url) {
 
         // Prepare API call.
         $guzzleClient = new Client([
-            'base_uri' => $base_url,
+            'base_uri' => $this->delivery_url,
+            'timeout'  => 4,
+        ]);
+
+        $options = [
+            'form_params' => [
+                'key'   => $this->secret,
+            ],
+        ];
+
+        // Request to transformer
+        $response = $guzzleClient->request('GET', $action_url);
+
+        // Evaluate response and handle errors.
+        try {
+//             return $response->getBody();
+             return $response;
+
+        } catch (Exception $exception) {
+
+            $error       = $exception->getCode() . ': ' . $exception->getMessage();
+        }
+    }
+
+    private function makeApiRequest(string $action_uri, array $params) {
+
+        // Prepare API call.
+        $guzzleClient = new Client([
+            'base_uri' => $this->api_url,
             'timeout'  => 4,
         ]);
 
@@ -104,28 +126,19 @@ class Transformer
         }
 
         // Request to transformer
-        if($request_method == 'POST') {
-            $response = $guzzleClient->request($request_method, $action_uri, $options);
-        } else {
-            $response = $guzzleClient->request($request_method, $action_uri);
-        }
+        $response = $guzzleClient->request('POST', $action_uri, $options);
+
 
         // Evaluate response and handle errors.
         // We can't only check for 200 here. Will receive 200, 201, 400, 404 from transformer
-//        if ($response->getStatusCode() == 200) {
 
         try {
-            $json = $response->getBody();
 
-            if ($json && $json['success']) {
+            return json_decode($response->getBody(), true);
 
-
-            } else {
-                $error       = $json['message'];
-            }
         } catch (Exception $exception) {
 
-            $error       = $exception->getCode() . ': ' . $exception->getMessage();
+            return $exception->getCode() . ': ' . $exception->getMessage();
         }
     }
 }
