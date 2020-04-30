@@ -83,7 +83,7 @@ class Transformer
         // Prepare API call.
         $guzzleClient = new Client([
             'base_uri' => $this->delivery_url,
-            'timeout'  => 4,
+            'timeout'  => 10,
         ]);
 
         $options = [
