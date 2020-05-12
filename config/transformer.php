@@ -14,7 +14,7 @@ return [
         'timeout' => 30,
     ],
     'delivery' => [
-        'url'     => 'https://images.goodbaby.eu',
+        'url'     => 'https://images.goodbaby.eu/',
         'timeout' => 30,
     ],
 ];
