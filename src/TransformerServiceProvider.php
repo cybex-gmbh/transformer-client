@@ -32,8 +32,10 @@ class TransformerServiceProvider extends ServiceProvider
         $this->app->singleton("Transformer", function () {
             return new \Cybex\Transformer\Transformer(
                 config('transformer.secret',''),
-                config('transformer.api_url','https://transformer.goodbaby.eu/api/v1/'),
-                config('transformer.delivery_url','https://images.goodbaby.eu/')
+                config('transformer.api.url','https://transformer.goodbaby.eu/api/v1/'),
+                config('transformer.delivery.url','https://images.goodbaby.eu/'),
+                config('transformer.api.timeout','https://transformer.goodbaby.eu/api/v1/', 30),
+                config('transformer.delivery.timeout','https://images.goodbaby.eu/', 30)
             );
         });
 

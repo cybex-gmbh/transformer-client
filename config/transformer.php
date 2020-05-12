@@ -8,7 +8,13 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'secret'        => '',
-    'api_url'       => 'https://transformer.goodbaby.eu/api/v1/',
-    'delivery_url'  => 'https://images.goodbaby.eu/',
+    'secret'   => '',
+    'api'      => [
+        'url'     => 'https://transformer.goodbaby.eu/api/v1/',
+        'timeout' => 30,
+    ],
+    'delivery' => [
+        'url'     => 'https://images.goodbaby.eu',
+        'timeout' => 30,
+    ],
 ];
