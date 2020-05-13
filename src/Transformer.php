@@ -89,7 +89,7 @@ class Transformer
         $url = sprintf('%s/%s/%s/%s/%s', $this->delivery_url, $folder, $identifier, $this->getTransformationsAsString($transformations));
 
         // Remove possible double Slashes in the Url and strip trailing Slashes, when no Transformations are given.
-        return rtrim( preg_replace('/\/{2,}/', '/', $url), '/');
+        return rtrim(preg_replace('/\/{2,}/', '/', $url), '/');
     }
 
     /**
@@ -210,20 +210,20 @@ class Transformer
     {
         $transformationStrings = [];
 
-        foreach($transformations as $transformation => $value) {
+        foreach ($transformations as $transformation => $value) {
             switch ($transformation) {
                 case 'width':
-                    if($value = $this->getValidatedInteger($value)) {
+                    if ($value = $this->getValidatedInteger($value)) {
                         $transformationStrings[] = sprintf('w-%d', $value);
                     }
                     break;
                 case 'height':
-                    if($value = $this->getValidatedInteger($value)) {
+                    if ($value = $this->getValidatedInteger($value)) {
                         $transformationStrings[] = sprintf('h-%d', $value);
                     }
                     break;
                 case 'format':
-                    if(in_array($value, ['png', 'jpg', 'gif'], true)) {
+                    if (in_array($value, ['png', 'jpg', 'gif'], true)) {
                         $transformationStrings = sprintf('f-%s', $value);
                     }
                 default:
