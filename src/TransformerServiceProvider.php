@@ -2,7 +2,6 @@
 
 namespace Cybex\Transformer;
 
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class TransformerServiceProvider extends ServiceProvider
@@ -15,7 +14,7 @@ class TransformerServiceProvider extends ServiceProvider
     public function boot()
     {
         // publish package config to app config space
-        $this->publishes([__DIR__.'/../config/transformer.php' => config_path('transformer.php'),]);
+        $this->publishes([__DIR__ . '/../config/transformer.php' => config_path('transformer.php'),]);
     }
 
     /**
@@ -27,15 +26,15 @@ class TransformerServiceProvider extends ServiceProvider
     {
         // merge package configuration file with the application's published copy.
         // This will allow users to define only the options they actually want to override in the published copy of the configuration.
-        $this->mergeConfigFrom(__DIR__.'/../config/transformer.php', 'transformer');
+        $this->mergeConfigFrom(__DIR__ . '/../config/transformer.php', 'transformer');
 
         $this->app->singleton("Transformer", function () {
             return new \Cybex\Transformer\Transformer(
-                config('transformer.secret',''),
-                config('transformer.api.url','https://transformer.goodbaby.eu/api/v1/'),
-                config('transformer.delivery.url','https://images.goodbaby.eu/'),
-                config('transformer.api.timeout','https://transformer.goodbaby.eu/api/v1/', 30),
-                config('transformer.delivery.timeout','https://images.goodbaby.eu/', 30)
+                config('transformer.secret', ''),
+                config('transformer.api.url', 'https://transformer.goodbaby.eu/api/v1/'),
+                config('transformer.delivery.url', 'https://images.goodbaby.eu/'),
+                config('transformer.api.timeout', 30),
+                config('transformer.delivery.timeout', 30)
             );
         });
 
