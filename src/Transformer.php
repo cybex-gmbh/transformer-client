@@ -224,7 +224,7 @@ class Transformer
                     break;
                 case 'format':
                     if (in_array($value, ['png', 'jpg', 'gif'], true)) {
-                        $transformationStrings = sprintf('f-%s', $value);
+                        $transformationStrings[] = sprintf('f-%s', $value);
                     }
                 default:
                     // Skip Invalid Transformation.
