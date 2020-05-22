@@ -86,10 +86,14 @@ class Transformer
      */
     public function getUrl(string $stash, string $folder, string $identifier, array $transformations = []): string
     {
-        $url = sprintf('%s/%s/%s/%s/%s', $this->delivery_url, $stash, $folder, $identifier, $this->getTransformationsAsString($transformations));
+        $path = sprintf('%s/%s/%s/%s', $stash, $folder, $identifier, $this->getTransformationsAsString($transformations));
 
-        // Remove possible double Slashes in the Url and strip trailing Slashes, when no Transformations are given.
-        return rtrim(preg_replace('/\/{2,}/', '/', $url), '/');
+        return sprintf('%s/%s',
+            // Trim possible Slashes around the Deliver-Url,
+            trim($this->delivery_url, '/'),
+            // Remove possible double Slashes in the Url and strip possible surrounding Slashes.
+            trim(preg_replace('/\/{2,}/', '/', $path), '/')
+        );
     }
 
     /**
