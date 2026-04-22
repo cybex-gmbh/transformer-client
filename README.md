@@ -1,5 +1,15 @@
 # Cybex/Transformer
 
+## Legacy
+
+This project has been superseded by the Transmorpher Media server
+
+https://github.com/cybex-gmbh/transmorpher
+
+and its client
+
+https://github.com/cybex-gmbh/laravel-transmorpher-client
+
 ## Installation
 
 To get the latest version, simply require the project using [Composer](https://getcomposer.org):
